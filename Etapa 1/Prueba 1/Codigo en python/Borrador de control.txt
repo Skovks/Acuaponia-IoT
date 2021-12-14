@@ -1,0 +1,48 @@
+if flotadorFiltroBajo=0 && flotadorFiltroAlto=0 && if flotadorPeces=0
+    Mensaje de Alerta
+if flotadorFiltroBajo=0 && flotadorFiltroAlto=0 && if flotadorPeces=1
+    apagar bomba
+if flotadorFiltroBajo=0 && flotadorFiltroAlto=1 && if flotadorPeces=0
+    Este caso no llega  a pasar nunca
+if flotadorFiltroBajo=0 && flotadorFiltroAlto=1 && if flotadorPeces=1
+    Este caso no llega a pasar nunca
+
+///A partir de aqui el codigo es valido
+Hysteresis=0;
+if (flotadorFiltroBajo=1 || flotadorFiltroAlto) //Hay agua
+    if flotadorPecesBajo=0 && flotadorPecesBajo=0 && Hysteresis=0    
+       prender bomba
+    if flotadorPecesBajo=0 && flotadorPecesAlto=1 && Hystersis=0 
+       Esta situacion nunca pasa 
+    if flotadorPecesBajo=1 && flotadorPecesAlto=0 && Hysteresis=0   
+       prender bomba
+    if flotadorPecesBajo=1 && flotadorPecesAlto=1 && Hysteresis=0
+       apagar bomba  
+       Hysteresis=1
+
+    if flotadorPecesBajo=0 && flotadorPecesAlto=0 && Hysteresis=1
+       Hysteresis=0   
+    if flotadorPecesBajo=0 && flotadorPecesAlto=1 && Hysteresis=1
+       Esto nunca pasa
+    if flotadorPecesBajo=1 && flotadorPecesAlto=0 && Hysteresis=1
+       apagar bomba
+    if flotadorPecesBajo=1 && flotadorPecesAlto=1 && Hysteresis=1
+       apagar bomba
+else   //No hay agua
+    apagar bomba
+
+///Hasta aqui es valido
+
+
+
+if flotadorFiltroBajo=1 && flotadorFiltroAlto=0 && if flotadorPeces=1
+    Apagar bomba
+if flotadorFiltroBajo=1 && flotadorFiltroAlto=1 && if flotadorPeces=0 //esta instruccion es la buena
+    prender bomba
+if flotadorFiltroBajo=1 && flotadorFiltroAlto=1 && if flotadorPeces=1
+    apagar bomba
+
+
+
+   
+    
