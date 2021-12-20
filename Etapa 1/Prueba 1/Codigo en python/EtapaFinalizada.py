@@ -37,6 +37,7 @@ try:
 				GPIO.output(RB, 0) #prender bomba
 			elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 0 and Hysteresis == 0:
 				GPIO.output(RB, 1)#Esta situacion no pasa pero apagamos
+				print("Problemas con el sensor:Peces")
 			elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and Hysteresis == 0:
 				GPIO.output(RB, 0) #prender bomba 
 			elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 0 and Hysteresis == 0: 
@@ -46,12 +47,31 @@ try:
 				Hysteresis = 0
 			elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 0 and Hysteresis == 1: 
 				GPIO.output(RB, 1)#Esta situacion nunca pasa, pero apagamos
+				print("Problemas con el sensor:Peces")
 			elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and Hysteresis == 1: 
 				GPIO.output(RB, 1) #Apagar bomba
 			else:
 				GPIO.output(RB, 1) #Apagar bomba
-		elif GPIO.input(FFL)==1 and GPIO.input(FFH)==0:
-			print("Deposito lleno: Advertencia")
+		elif GPIO.input(FFL)==1 and GPIO.input(FFH)==0: #Deposito lleno
+			if GPIO.input(FPL) == 1 and GPIO.input(FPH) == 1 and Hysteresis == 0: 
+				GPIO.output(RB, 0) #prender bomba
+			elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 0 and Hysteresis == 0:
+				GPIO.output(RB, 1)#Esta situacion no pasa pero apagamos
+				print("Problemas con el sensor:Peces")
+			elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and Hysteresis == 0:
+				GPIO.output(RB, 0) #prender bomba 
+			elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 0 and Hysteresis == 0: 
+				GPIO.output(RB, 1) #Apagar bomba
+				Hysteresis = 1
+			elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 1 and Hysteresis == 1: 
+				Hysteresis = 0
+			elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 0 and Hysteresis == 1: 
+				GPIO.output(RB, 1)#Esta situacion nunca pasa, pero apagamos
+				print("Problemas con el sensor:Peces")
+			elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and Hysteresis == 1: 
+				GPIO.output(RB, 1) #Apagar bomba
+			else:
+				GPIO.output(RB, 1) #Apagar bomba
 		else:  #No hay agua en el deposito
 			GPIO.output(RB, 1) #Apagar bomba
 			
