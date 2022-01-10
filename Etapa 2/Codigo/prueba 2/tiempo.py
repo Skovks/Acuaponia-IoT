@@ -3,7 +3,7 @@ from datetime import datetime
 
 #Constantes 
 GPIO.setmode(GPIO.BOARD)
-RL = 12 #Relay de Luces 
+RL = 40 #Relay de Luces 
 
 
 #Inicializamos los pines de entrada y salida
