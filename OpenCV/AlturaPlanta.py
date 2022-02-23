@@ -2,7 +2,7 @@ import imutils.contours
 import cv2 
 import cv2 as cv
 
-image = cv.imread('Fotos/flower1.jpg')
+image = cv.imread('Fotos/flower4.jpg')
 #cv.imshow('Oaxaca', image)
 
 # Cover to grayscale and blur
@@ -43,25 +43,22 @@ output_image = image.copy()
 mmPerPixel = 16 / boundRect[0][2]
 print(boundRect[0][2])
 print(mmPerPixel)
-highestRect = 1000
-lowestRect = 0
+NumRec=0
+IndiceRec=0
 for i in range(0, len(contours)):
 
     # Too smol?
     if boundRect[i][2] < 100 or boundRect[i][3] < 100:
         continue
 
-    # The first rectangle is our control, so set the ratio
-    if highestRect > boundRect[i][1]:
-        highestRect = boundRect[i][1]
-    if lowestRect < (boundRect[i][1] + boundRect[i][3]):
-        lowestRect = (boundRect[i][1] + boundRect[i][3])
-
     # Create a boundary box
     cv2.rectangle(output_image, (int(boundRect[i][0]), int(boundRect[i][1])),
                   (int(boundRect[i][0] + boundRect[i][2]),
                   int(boundRect[i][1] + boundRect[i][3])), (0, 255, 0), 3)
+    NumRec=NumRec+1
+    IndiceRec=i
     print(boundRect[i],i)
+
 PrimerRect = image.copy()
 # Create a boundary box
 cv2.rectangle(PrimerRect, (int(boundRect[0][0]), int(boundRect[0][1])),(int(boundRect[0][0] + boundRect[0][2]), int(boundRect[0][1] + boundRect[0][3])), (0, 255, 0), 3)
@@ -69,11 +66,10 @@ cv2.rectangle(PrimerRect, (int(boundRect[0][0]), int(boundRect[0][1])),(int(boun
 resized_imagePrimerRec = cv2.resize(PrimerRect, (1280, 720))
 cv2.imshow("Primer rectangulo", resized_imagePrimerRec)
 
-
-print(lowestRect)
-print(highestRect)
 # Calculate the size of our plant
-plantHeight = (lowestRect - highestRect) * mmPerPixel
+print('Rectangulos encontrados:',NumRec)
+print(IndiceRec)
+plantHeight = (boundRect[IndiceRec][3]) * mmPerPixel
 print("Plant height is {0:.0f}mm".format(plantHeight))
 
 # Resize and display the image (press key to exit)
