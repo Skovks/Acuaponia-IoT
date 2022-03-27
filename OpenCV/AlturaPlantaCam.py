@@ -1,10 +1,16 @@
 import imutils.contours
 import cv2 
 import cv2 as cv
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+from time import sleep
 
-image = cv.imread('Fotos/flower2.jpg')
-#cv.imshow('Oaxaca', image)
-
+#Tomar foto en raspberry
+camera = PiCamera()
+rawCapture = PiRGBArray(camera)
+sleep(0.1)
+camera.capture(rawCapture, format="bgr")
+image = rawCapture.array
 
 # Cover to grayscale and blur
 greyscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -41,7 +47,8 @@ for i, c in enumerate(contours):
     boundRect[i] = cv2.boundingRect(contours_poly[i])
 
 output_image = image.copy()
-mmPerPixel = 16 / boundRect[0][2]
+mmPerPixel = 16
+ / boundRect[0][2]
 print(boundRect[0][2])
 print(mmPerPixel)
 NumRec=0
