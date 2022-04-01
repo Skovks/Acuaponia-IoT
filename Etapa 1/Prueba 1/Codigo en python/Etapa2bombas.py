@@ -48,13 +48,10 @@ try:
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
 			print("Pecera y deposito llenos: desborde del deposito por condicion externa")
-		elif GPIO.input(FFL) == 1 and GPIO.input(FPL) == 1:
-			GPIO.output(RB1, 0) #apagar bomba de deposito
-			GPIO.output(RB2, 1) #encender bomba de pecera
+		elif GPIO.input(FFL) == 1 and GPIO.input(FPL) == 1: #agua nivel bajo en pecera y en deposito
+			GPIO.output(RB1, 1) #apagar bomba de deposito
+			GPIO.output(RB2, 0) #encender bomba de pecera
 			
 
-			
-			
-			
 except KeyboardInterrupt:            #Excepcion para atrapar las interrupciones
     GPIO.cleanup()                   #Con el teclado

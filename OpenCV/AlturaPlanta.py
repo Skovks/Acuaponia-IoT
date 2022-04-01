@@ -2,7 +2,7 @@ import imutils.contours
 import cv2 
 import cv2 as cv
 
-image = cv.imread('Fotos/flower2.jpg')
+image = cv.imread('Fotos/flower1.jpg')
 #cv.imshow('Oaxaca', image)
 
 
