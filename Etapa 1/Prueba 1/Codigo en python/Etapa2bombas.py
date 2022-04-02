@@ -32,8 +32,6 @@ GPIO.setup(RB2, GPIO.OUT, initial = 1)
 #Bucle infinito
 try:
 	while True:
-		#print(GPIO.input(FFL), GPIO.input(FFH),GPIO.input(FPL), GPIO.input(FPH))
-		#print(GPIO.input(FFL) == 1)
 		if GPIO.input(FFL) == 0 and GPIO.input(FFH) == 0 and GPIO.input(FPL) == 0: #DEPOSITO LLENO y con nivel bajo asegurado en pecera
 			GPIO.output(RB1, 0) #prender bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
