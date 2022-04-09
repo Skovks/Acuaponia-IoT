@@ -36,19 +36,20 @@ GPIO.setup(RB2, GPIO.OUT, initial = 1)
 GPIO.setup(RL, GPIO.OUT, initial = 0)
 
 horaE="06" #Hora de encendido
-minutoE="15" #minuto de apagado
+minutoE="00" #minuto de apagado
 horaA="21" #Hora de apagado
-minutoA="15" #minuto de apagado
+minutoA="00" #minuto de apagado
 
 hE=int(horaE)
 mE=int(minutoE)
 hA=int(horaA)
 mA=int(minutoA)
-dormir=abs(hA-hE-24)*60
+dormir=abs(hA-hE-24)*60*60
 #Bucle infinito
 try:
 	while True:
 		now=datetime.now()
+		#print("Flotador Deposito Bajo:",GPIO.input(FFL),"Flotador Deposito Alto:", GPIO.input(FFH), "Flotador Pecera Bajo:", GPIO.input(FPL),"Flotador Pecera Alto:", GPIO.input(FPH))
 		if now.hour == hE and now.minute == mE:
 			print("Temporizador iniciado")
 			GPIO.output(RL, 0) #Prender luces
@@ -75,6 +76,14 @@ try:
 		elif GPIO.input(FFL) == 1 and GPIO.input(FPL) == 1: #agua nivel bajo en pecera y en deposito
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 0) #encender bomba de pecera
+		elif GPIO.input(FPL) == 1 and GPIO.input(FPH)== 0: #Sensor obstruido pecera
+			GPIO.output(RB1, 1) #apagar bomba de deposito
+			GPIO.output(RB2, 1) #apagar bomba de pecera
+			print("Sensor obstruido: Revisar sensor en pecera")
+		elif GPIO.input(FFL) == 1 and GPIO.input(FFH)== 0: #Sensor obstruido deposito
+			GPIO.output(RB1, 1) #apagar bomba de deposito
+			GPIO.output(RB2, 1) #apagar bomba de pecera
+			print("Sensor obstruido: Revisar sensor en deposito")
 			
 
 except KeyboardInterrupt:            #Excepcion para atrapar las interrupciones
