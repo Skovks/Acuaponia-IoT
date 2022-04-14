@@ -18,7 +18,7 @@ image = cam.read()[1]
 # Cover to grayscale and blur
 greyscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 greyscale = cv2.GaussianBlur(greyscale, (7, 7), 0)
-ret, thresh=cv.threshold(greyscale,110,255, cv.THRESH_BINARY)
+ret, thresh=cv.threshold(greyscale,50,255, cv.THRESH_BINARY)
 # Resize and display the image (press key to exit)
 resized_image2 = cv2.resize(thresh, (640, 480))
 cv2.imshow("Imagen binarizada", resized_image2)
@@ -50,7 +50,7 @@ for i, c in enumerate(contours):
     boundRect[i] = cv2.boundingRect(contours_poly[i])
 
 output_image = image.copy()
-mmPerPixel = 80/ boundRect[0][2]
+mmPerPixel = 81.5/ boundRect[0][2]
 print(boundRect[0][2])
 print(mmPerPixel)
 NumRec=0

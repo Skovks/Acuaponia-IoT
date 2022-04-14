@@ -22,9 +22,8 @@ FPL = 16 #Flotador de la Pecera Nivel Low
 FPH = 18 #Flotador de la Pecera Nivel High
 RB1 = 15 #Relay de la bomba de deposito
 RB2 = 19 # Relay de la bomba de pecera
-RL = 40 #Relay de Luces 
-#BL=0; #bandera de luces 
-
+RL = 40 #Relay de Luces  
+bf=0
 #Cuerpo del programa
 #Inicializamos los pines de entrada y salida
 GPIO.setup(FFL, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -58,6 +57,7 @@ try:
 			print("temporizador apagado:en espera")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
+			bf=0
 			time.sleep(dormir)
 		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 0 and GPIO.input(FPL) == 0: #DEPOSITO LLENO y con nivel bajo asegurado en pecera
 			GPIO.output(RB1, 0) #prender bomba de deposito
@@ -65,6 +65,10 @@ try:
 		elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 0 and GPIO.input(FFL) == 0: #PECERA LLENA y con nivel bajo asegurado en deposito
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 0) #prender bomba de pecera
+		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and bf==0: #inicio
+			GPIO.output(RB1, 1) #prender bomba de deposito
+			GPIO.output(RB2, 0) #apagar bomba de pecera
+			bf=1
 		elif GPIO.input(FFL) == 1 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH)== 0:
 			print("agregar mas agua al deposito")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
@@ -76,15 +80,15 @@ try:
 		elif GPIO.input(FFL) == 1 and GPIO.input(FPL) == 1: #agua nivel bajo en pecera y en deposito
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 0) #encender bomba de pecera
-		elif GPIO.input(FPL) == 1 and GPIO.input(FPH)== 0: #Sensor obstruido pecera
+		elif GPIO.input(FPL) == 0 and GPIO.input(FPH)== 1 and GPIO.input(FFL) == 1 and GPIO.input(FFH)== 1: #Sensor obstruido pecera
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
 			print("Sensor obstruido: Revisar sensor en pecera")
-		elif GPIO.input(FFL) == 1 and GPIO.input(FFH)== 0: #Sensor obstruido deposito
+		elif GPIO.input(FFL) == 0 and GPIO.input(FFH)== 1 and GPIO.input(FPL) == 1 and GPIO.input(FPH)== 1: #Sensor obstruido deposito
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
 			print("Sensor obstruido: Revisar sensor en deposito")
-			
+		
 
 except KeyboardInterrupt:            #Excepcion para atrapar las interrupciones
     GPIO.cleanup()                   #Con el teclado
