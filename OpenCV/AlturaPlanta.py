@@ -2,18 +2,26 @@ import imutils.contours
 import cv2 
 import cv2 as cv
 
-image = cv.imread('Fotos/flower1.jpg')
+image = cv.imread('Fotos/image.jpg')
 #cv.imshow('Oaxaca', image)
 
 
 # Cover to grayscale and blur
-greyscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-greyscale = cv2.GaussianBlur(greyscale, (7, 7), 0)
-ret, thresh=cv.threshold(greyscale, 50, 255, cv.THRESH_BINARY)
+
+#cambiar a version deslavada
+#BGR to l*a*b
+lab=cv.cvtColor(image, cv.COLOR_BGR2LAB)
+resized_lab = cv2.resize(lab, (1280, 720))
+cv2.imshow("LAB", resized_lab)
+l, a, b = cv2.split(lab)
+resized_a = cv2.resize(a, (1280, 720))
+cv2.imshow('verde a magenta', resized_a)
+
+desenfoque = cv2.GaussianBlur(a, (7, 7), 0)
+ret, thresh=cv.threshold(desenfoque, 120, 255, cv.THRESH_BINARY)
 # Resize and display the image (press key to exit)
 resized_image2 = cv2.resize(thresh, (1280, 720))
 cv2.imshow("Imagen binarizada", resized_image2)
-
 
 # Detect edges and close gaps
 canny_output = cv2.Canny(thresh, 50, 100)
@@ -24,7 +32,6 @@ canny_output = cv2.dilate(canny_output, None, iterations=1)
 # Resize and display the image (press key to exit)
 resized_image4 = cv2.resize(canny_output, (1280, 720))
 cv2.imshow("Imagen dilatada", resized_image4)
-
 
 # Get the contours of the shapes, sort l-to-r and create boxes
 contours, hierarchies = cv2.findContours(canny_output, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -49,20 +56,20 @@ IndiceRec=0
 for i in range(0, len(contours)):
 
     # Too smol?
-    if boundRect[i][2] < 100 or boundRect[i][3] < 100:
+    if boundRect[i][2] < 500 or boundRect[i][3] < 500:
         continue
 
     # Create a boundary box
     cv2.rectangle(output_image, (int(boundRect[i][0]), int(boundRect[i][1])),
                   (int(boundRect[i][0] + boundRect[i][2]),
-                  int(boundRect[i][1] + boundRect[i][3])), (0, 255, 0), 3)
+                  int(boundRect[i][1] + boundRect[i][3])), (0, 0, 255), 2)
     NumRec=NumRec+1
     IndiceRec=i
     print(boundRect[i],i)
 
 PrimerRect = image.copy()
 # Create a boundary box
-cv2.rectangle(PrimerRect, (int(boundRect[0][0]), int(boundRect[0][1])),(int(boundRect[0][0] + boundRect[0][2]), int(boundRect[0][1] + boundRect[0][3])), (0, 255, 0), 3)
+cv2.rectangle(PrimerRect, (int(boundRect[0][0]), int(boundRect[0][1])),(int(boundRect[0][0] + boundRect[0][2]), int(boundRect[0][1] + boundRect[0][3])), (0, 0, 255), 2)
 # Resize and display the image (press key to exit)
 resized_imagePrimerRec = cv2.resize(PrimerRect, (1280, 720))
 cv2.imshow("Primer rectangulo", resized_imagePrimerRec)
