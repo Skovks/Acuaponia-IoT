@@ -1,5 +1,7 @@
 import RPi.GPIO as GPIO
 from datetime import datetime
+import time
+
 
 #Constantes 
 GPIO.setmode(GPIO.BOARD)
@@ -7,16 +9,12 @@ RL = 40 #Relay de Luces
 BL=0; #bandera de luces 
 
 #Inicializamos los pines de entrada y salida
-GPIO.setup(RL, GPIO.OUT, initial = 1)
+GPIO.setup(RL, GPIO.OUT, initial = 0)
 
-print("Current Time =", datetime.now())
-print("Establece la hora de encendido: En hora y minutos")
-horaE=input('Introduce la hora:')
-minutoE=input('Introduce el minuto:')
-
-print("Establece la hora de apagado: En hora y minutos")
-horaA=input('Introduce la hora:')
-minutoA=input('Introduce el minuto:')
+horaE="06" #Hora de encendido
+minutoE="00" #minuto de apagado
+horaA="21" #Hora de apagado
+minutoA="00" #minuto de apagado
 
 hE=int(horaE)
 mE=int(minutoE)
@@ -35,6 +33,7 @@ try:
             GPIO.output(RL, 1) #Apagar luces
             print("temporizador apagado:en espera")
             BL=0
+            time.sleep(dormir)
             
             
     
