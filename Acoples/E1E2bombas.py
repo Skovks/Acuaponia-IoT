@@ -16,10 +16,10 @@ from datetime import datetime
 
 #Constantes 
 GPIO.setmode(GPIO.BOARD)
-FFL = 11 #Flotador del Filtro Nivel Low
-FFH = 13 #Flotador del Filtro Nivel High
-FPL = 16 #Flotador de la Pecera Nivel Low
-FPH = 18 #Flotador de la Pecera Nivel High
+FFL = 29 #Flotador del Filtro Nivel Low
+FFH = 31 #Flotador del Filtro Nivel High
+FPL = 36 #Flotador de la Pecera Nivel Low
+FPH = 38 #Flotador de la Pecera Nivel High
 RB1 = 15 #Relay de la bomba de deposito
 RB2 = 19 # Relay de la bomba de pecera
 RL = 40 #Relay de Luces  
@@ -49,7 +49,7 @@ dormir=abs(hA-hE-24)*60*60
 try:
 	while True:
 		now=datetime.now()
-		#print("Flotador Deposito Bajo:",GPIO.input(FFL),"Flotador Deposito Alto:", GPIO.input(FFH), "Flotador Pecera Bajo:", GPIO.input(FPL),"Flotador Pecera Alto:", GPIO.input(FPH))
+		print("Flotador Deposito Bajo:",GPIO.input(FFL),"Flotador Deposito Alto:", GPIO.input(FFH), "Flotador Pecera Bajo:", GPIO.input(FPL),"Flotador Pecera Alto:", GPIO.input(FPH))
 		if now.hour == hE and now.minute == mE:
 			print("Temporizador iniciado")
 			GPIO.output(RL, 0) #Prender luces
@@ -70,11 +70,11 @@ try:
 			GPIO.output(RB1, 1) #prender bomba de deposito
 			GPIO.output(RB2, 0) #apagar bomba de pecera
 			bf=1
-		elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 0 and GPIO.input(FFL) == 1 and GPIO.input(FFH) == 1: #deposito casi vacio
+		elif GPIO.input(FFL) == 1 and GPIO.input(FFH) == 1: #deposito casi vacio
 			print("agregar mas agua al deposito: Niveles bajos")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
-		elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 1 and GPIO.input(FFL) == 1 and GPIO.input(FFH) == 1: #pecera casi vacia
+		elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 1: #pecera casi vacia
 			print("agregar mas agua a la pecera: Niveles bajos")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
