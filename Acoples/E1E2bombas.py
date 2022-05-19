@@ -23,7 +23,8 @@ FPH = 38 #Flotador de la Pecera Nivel High
 RB1 = 15 #Relay de la bomba de deposito
 RB2 = 19 # Relay de la bomba de pecera
 RL = 40 #Relay de Luces  
-bf=0 #bandera de inicio
+bf=0 #bandera de inicio bombas
+bl=0 #bandera de inicio de luces
 
 #Cuerpo del programa
 #Inicializamos los pines de entrada y salida
@@ -49,11 +50,11 @@ dormir=abs(hA-hE-24)*60*60
 try:
 	while True:
 		now=datetime.now()
-		print("Flotador Deposito Bajo:",GPIO.input(FFL),"Flotador Deposito Alto:", GPIO.input(FFH), "Flotador Pecera Bajo:", GPIO.input(FPL),"Flotador Pecera Alto:", GPIO.input(FPH))
+		#print("Flotador Deposito Bajo:",GPIO.input(FFL),"Flotador Deposito Alto:", GPIO.input(FFH), "Flotador Pecera Bajo:", GPIO.input(FPL),"Flotador Pecera Alto:", GPIO.input(FPH))
 		if now.hour == hE and now.minute == mE:
 			print("Temporizador iniciado")
 			GPIO.output(RL, 0) #Prender luces
-		elif now.hour == hA and now.minute == mA:
+		elif now.hour >= hA or now.hour<hE and now.minute >= mA:
 			GPIO.output(RL, 1) #Apagar luces
 			print("temporizador apagado:en espera")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
