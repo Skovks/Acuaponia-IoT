@@ -64,13 +64,17 @@ try:
 		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 0 and GPIO.input(FPL) == 0: #DEPOSITO LLENO y con nivel bajo asegurado en pecera
 			GPIO.output(RB1, 0) #prender bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
+			bf=1
 		elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 0 and GPIO.input(FFL) == 0: #PECERA LLENA y con nivel bajo asegurado en deposito
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 0) #prender bomba de pecera
+			bf=0
 		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and bf==0: #inicio
 			GPIO.output(RB1, 1) #prender bomba de deposito
 			GPIO.output(RB2, 0) #apagar bomba de pecera
-			bf=1
+		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and bf==1: #segundo
+			GPIO.output(RB1, 0) #apagar bomba de deposito
+			GPIO.output(RB2, 1) #prender bomba de pecera
 		elif GPIO.input(FFL) == 1 and GPIO.input(FFH) == 1: #deposito casi vacio
 			print("agregar mas agua al deposito: Niveles bajos")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
