@@ -13,6 +13,8 @@
 import RPi.GPIO as GPIO
 import time
 from datetime import datetime
+import psycopg2 #biblioteca para base de datos postgresql
+
 
 #Constantes 
 GPIO.setmode(GPIO.BOARD)
@@ -36,30 +38,30 @@ GPIO.setup(RB1, GPIO.OUT, initial = 1)
 GPIO.setup(RB2, GPIO.OUT, initial = 1)
 GPIO.setup(RL, GPIO.OUT, initial = 0)
 
-horaE="06" #Hora de encendido
-minutoE="00" #minuto de apagado
-horaA="21" #Hora de apagado
-minutoA="00" #minuto de apagado
-
-hE=int(horaE)
-mE=int(minutoE)
-hA=int(horaA)
-mA=int(minutoA)
-dormir=abs(hA-hE-24)*60*60
 #Bucle infinito
 try:
+	conexion = psycopg2.connect(host="localhost", database="acuaponia", user="grafana", password="1234")
+	cur = conexion.cursor()
 	while True:
+		cur.execute("SELECT hora_apagado, hora_encendido, minuto_apagado, minuto_encendido FROM public.\"controlLuces_programacion_luces\" WHERE id=(select max(id) from public.\"controlLuces_programacion_luces\")")
+		for x in cur.fetchall():
+			hora_apagado=x[0] 
+			hora_encendido=x[1] 
+			minuto_apagado=x[2]
+			minuto_encendido=x[3]
 		now=datetime.now()
+		#print(hora_encendido,hora_apagado)
 		#print("Flotador Deposito Bajo:",GPIO.input(FFL),"Flotador Deposito Alto:", GPIO.input(FFH), "Flotador Pecera Bajo:", GPIO.input(FPL),"Flotador Pecera Alto:", GPIO.input(FPH))
-		if now.hour == hE and now.minute == mE:
+		if now.hour == hora_encendido and now.minute == minuto_encendido:
 			print("Temporizador iniciado")
 			GPIO.output(RL, 0) #Prender luces
-		elif now.hour >= hA or now.hour<hE and now.minute >= mA:
+		elif hora_apagado<=now.hour or hora_encendido>now.hour and minuto_apagado<=now.minute:
 			GPIO.output(RL, 1) #Apagar luces
 			print("temporizador apagado:en espera")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
 			bf=0
+			dormir=abs(hora_apagado-hora_encendido-24)*60*60
 			time.sleep(dormir)
 		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 0 and GPIO.input(FPL) == 0: #DEPOSITO LLENO y con nivel bajo asegurado en pecera
 			GPIO.output(RB1, 0) #prender bomba de deposito
@@ -87,6 +89,7 @@ try:
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
 			print("Pecera y deposito llenos: desborde del deposito por condicion externa")
+		time.sleep(5)
 		
 
 except KeyboardInterrupt:            #Excepcion para atrapar las interrupciones
