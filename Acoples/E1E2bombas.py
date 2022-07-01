@@ -26,7 +26,7 @@ FPH = 38 #Flotador de la Pecera para el Nivel Alto
 RB1 = 15 #Relay para prender/apagar la bomba del deposito
 RB2 = 19 #Relay para prender/apagar la bomba de la pecera
 RL = 40 #Relay para el encendido/apagado de Luces  
-bf=0 #bandera de inicio para bombas
+bf=0 #bandera de bombas para generar histeresis con el control on-off
 bl=0 #bandera de inicio para luces
 
 #Cuerpo del programa
@@ -40,7 +40,7 @@ GPIO.setup(RB2, GPIO.OUT, initial = 1)
 GPIO.setup(RL, GPIO.OUT, initial = 0)
 
 #Inicio del programa Principal
-try: # 
+try: #Intentar todo el codigo principal
 	#Conexion a la base de datos de POSTGRESQL para leer datos
 	#Primer parametro host=(IP de la base de datos o en su defecto localhost)
 	#Segundo parametro database=(nombre de la base de datos)
@@ -53,53 +53,53 @@ try: #
 		con los ultimos registros guardados. Lo que esta dentro de la funcion es una cadena de caracteres con una 
 		sentencia SQL para acceder a los datos solicitados'''
 		cur.execute("SELECT hora_apagado, hora_encendido, minuto_apagado, minuto_encendido FROM public.\"controlLuces_programacion_luces\" WHERE id=(select max(id) from public.\"controlLuces_programacion_luces\")")
-		for x in cur.fetchall(): #
-			hora_apagado=x[0] 
+		for x in cur.fetchall(): #Ciclo para recorrer el arreglo de datos
+			hora_apagado=x[0]
 			hora_encendido=x[1] 
 			minuto_apagado=x[2]
 			minuto_encendido=x[3]
-		now=datetime.now()
-		#print(hora_encendido,hora_apagado)
+		now=datetime.now() #Guardar hora actual en la variable now
+		#Las siguiente linea es para depurar el programa en caso de que se quiera ver  los estados de los sensores
 		#print("Flotador Deposito Bajo:",GPIO.input(FFL),"Flotador Deposito Alto:", GPIO.input(FFH), "Flotador Pecera Bajo:", GPIO.input(FPL),"Flotador Pecera Alto:", GPIO.input(FPH))
-		if now.hour == hora_encendido and now.minute == minuto_encendido:
-			print("Temporizador iniciado")
+		if now.hour == hora_encendido and now.minute == minuto_encendido: #Revisa si los datos de hora para encendido son iguales
+			print("Temporizador iniciado") 
 			GPIO.output(RL, 0) #Prender luces
-		elif hora_apagado<=now.hour or hora_encendido>now.hour and minuto_apagado<=now.minute:
+		elif hora_apagado<=now.hour or hora_encendido>now.hour and minuto_apagado<=now.minute: #Revisa si la hora de apagado esta dentro del rango de encendido para que el control se duerma
 			GPIO.output(RL, 1) #Apagar luces
 			print("temporizador apagado:en espera")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
-			bf=0
-			dormir=abs(hora_apagado-hora_encendido-24)*60*60
-			time.sleep(dormir)
-		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 0 and GPIO.input(FPL) == 0: #DEPOSITO LLENO y con nivel bajo asegurado en pecera
+			bf=0 #Reincio de bandera de hysteresis
+			dormir=abs(hora_apagado-hora_encendido-24)*60*60 #Tiempo total para dormir al control
+			time.sleep(dormir) #Ejecuta la funcion para dormir, con el tiempo que se establecio
+		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 0 and GPIO.input(FPL) == 0: #Solo pasa con el DEPOSITO LLENO y con nivel bajo asegurado en pecera
 			GPIO.output(RB1, 0) #prender bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
-			bf=1
-		elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 0 and GPIO.input(FFL) == 0: #PECERA LLENA y con nivel bajo asegurado en deposito
+			bf=1 #Cambio de estado de la bandera para generar hysteresis con el control on-off
+		elif GPIO.input(FPL) == 0 and GPIO.input(FPH) == 0 and GPIO.input(FFL) == 0: #Solo pasa con la PECERA LLENA y con nivel bajo asegurado en deposito
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 0) #prender bomba de pecera
-			bf=0
-		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and bf==0: #inicio
+			bf=0 #Cambio de estado de la bandera para generar hystereis con el control on-off
+		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and bf==0: #Condicion de inicio para el flujo de agua
 			GPIO.output(RB1, 1) #prender bomba de deposito
 			GPIO.output(RB2, 0) #apagar bomba de pecera
-		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and bf==1: #segundo
+		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 1 and GPIO.input(FPL) == 0 and GPIO.input(FPH) == 1 and bf==1: #Condicion auxiliar para el flujo de agua
 			GPIO.output(RB1, 0) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #prender bomba de pecera
-		elif GPIO.input(FFL) == 1 and GPIO.input(FFH) == 1: #deposito casi vacio
+		elif GPIO.input(FFL) == 1 and GPIO.input(FFH) == 1: #Solo pasa con el deposito casi vacio
 			print("agregar mas agua al deposito: Niveles bajos")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
-		elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 1: #pecera casi vacia
+		elif GPIO.input(FPL) == 1 and GPIO.input(FPH) == 1: #Solo pasa con la pecera casi vacia
 			print("agregar mas agua a la pecera: Niveles bajos")
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
-		elif GPIO.input(FPL) == 0 and GPIO.input(FPH)== 0 and GPIO.input(FFL) == 0 and GPIO.input(FFH)== 0: #Ambos llenos
+		elif GPIO.input(FPL) == 0 and GPIO.input(FPH)== 0 and GPIO.input(FFL) == 0 and GPIO.input(FFH)== 0: #Solo pasa con ambos llenos
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
 			print("Pecera y deposito llenos: desborde del deposito por condicion externa")
-		time.sleep(5)
+		time.sleep(5) #Duerme el sistema de control por 5 segundos para que no se ejecute todo el tiempo
 		
 
-except KeyboardInterrupt:            #Excepcion para atrapar las interrupciones
-    GPIO.cleanup()                   #Con el teclado
+except KeyboardInterrupt:            #Excepcion para atrapar las interrupciones con el teclado
+    GPIO.cleanup()                   
