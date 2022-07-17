@@ -20,28 +20,40 @@
   https://www.arduino.cc/en/Tutorial/BuiltInExamples/AnalogInOutSerial
 */
 // These constants won't change. They're used to give names to the pins used:
-const int analogInPin = A0;  // Analog input pin that the potentiometer is attached to
-const int analogOutPin = 9; // Analog output pin that the LED is attached to
-//boton y relay
-const int buttonPin = 2;     // the number of the pushbutton pin
-const int ledPin =  12;      // the number of the LED pin
-
+const int analogInPin = A0;  // Entrada de punta roja y resistencia
+const int analogOutPin = 9; // Led indicador de intensidad de voltaje
+//boton y electrovalvulas
+const int buttonPin = 2;     // Push button de inicio 
+const int Beer =  7;      // Relay de electrovalvula de cerveza
+const int PistonesUp = 11;         //Relay de pistones de subida
+const int PistonesDown=10;  //pistones de bajada
+const int CO = 6;         //relay de CO2 
+int bandera=0;
 int sensorValue = 0;        // value read from the pot
 int outputValue = 0;        // value output to the PWM (analog out)
 int buttonState = 0;         // variable for reading the pushbutton status
+int inicio=0;
 void setup() {
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
-  // initialize the LED pin as an output:
-  pinMode(ledPin, OUTPUT);
   // initialize the pushbutton pin as an input:
   pinMode(buttonPin, INPUT);
+  pinMode(Beer,OUTPUT);
+  pinMode(PistonesUp,OUTPUT);
+  pinMode(PistonesDown,OUTPUT);
+  pinMode(CO,OUTPUT);  
 }
 
 void loop() {
   // read the state of the pushbutton value:
+  if(inicio==0){
+    digitalWrite(Beer,HIGH);
+    digitalWrite(CO,HIGH);
+    digitalWrite(PistonesUp,HIGH);
+    digitalWrite(PistonesDown,HIGH); 
+    inicio=1;
+  }
   buttonState = digitalRead(buttonPin);
-
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
   if (buttonState == HIGH){
     while(true){
@@ -56,10 +68,33 @@ void loop() {
       Serial.print(sensorValue);
       Serial.print("\t output = ");
       Serial.println(outputValue);
-      digitalWrite(ledPin, LOW);
-      // turn LED on:
+      if(bandera==0){
+        //Baja los pistones
+        digitalWrite(PistonesUp, LOW);
+        Serial.println("Bajando pistones...");
+        delay(3000);//espera a que baje el piston 3 segundos
+        //activar electrovalvula de CO2 por 12 segundos
+        Serial.println("Valvula de CO2 activada");
+        digitalWrite(CO,LOW);
+        delay(12000);
+        Serial.println("Valvula de CO2 desactivada");
+        digitalWrite(CO,HIGH);
+        delay(1000);
+        //activar electrovalvula de cerveza
+        Serial.println("Activacion de valvula de cerveza");
+        digitalWrite(Beer, LOW);
+        bandera=1; 
+      }
       if(sensorValue<800){
-        Serial.println("Deteccion de liquido");
+        Serial.println("Deteccion de liquido: Apagado de valvula de cerveza");
+        digitalWrite(Beer,HIGH); //apaga electrovalvula de cerveza
+        delay(1000);//espera estandar
+        digitalWrite(PistonesUp, HIGH);//apagar pistones de bajada
+        delay(1000);//espera estandar
+        digitalWrite(PistonesDown,LOW); //Subir pistones
+        delay(3000);//espera a que suban los pistones durante 3 segundos
+        digitalWrite(PistonesDown,HIGH);// apagar pistones de subida
+        bandera=0;
         break;
       }
       delay(200);
@@ -67,7 +102,6 @@ void loop() {
   } else {
     // turn LED off:
     Serial.println("Esperando");
-    digitalWrite(ledPin, HIGH);
     delay(200);
   }
   // wait 500 milliseconds before the next loop for the analog-to-digital
