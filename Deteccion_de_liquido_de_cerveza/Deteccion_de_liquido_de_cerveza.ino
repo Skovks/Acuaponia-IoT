@@ -24,15 +24,14 @@ const int analogInPin = A0;  // Entrada de punta roja y resistencia
 const int analogOutPin = 9; // Led indicador de intensidad de voltaje
 //boton y electrovalvulas
 const int buttonPin = 2;     // Push button de inicio 
-const int Beer =  7;      // Relay de electrovalvula de cerveza
+const int Beer =  12;      // Relay de electrovalvula de cerveza
 const int PistonesUp = 11;         //Relay de pistones de subida
 const int PistonesDown=10;  //pistones de bajada
-const int CO = 6;         //relay de CO2 
+const int CO = 7;         //relay de CO2 
 int bandera=0;
 int sensorValue = 0;        // value read from the pot
 int outputValue = 0;        // value output to the PWM (analog out)
 int buttonState = 0;         // variable for reading the pushbutton status
-int inicio=0;
 void setup() {
   // initialize serial communications at 9600 bps:
   Serial.begin(9600);
@@ -42,17 +41,14 @@ void setup() {
   pinMode(PistonesUp,OUTPUT);
   pinMode(PistonesDown,OUTPUT);
   pinMode(CO,OUTPUT);  
+  digitalWrite(Beer,HIGH);
+  digitalWrite(CO,HIGH);
+  digitalWrite(PistonesUp,HIGH);
+  digitalWrite(PistonesDown,HIGH); 
 }
 
 void loop() {
   // read the state of the pushbutton value:
-  if(inicio==0){
-    digitalWrite(Beer,HIGH);
-    digitalWrite(CO,HIGH);
-    digitalWrite(PistonesUp,HIGH);
-    digitalWrite(PistonesDown,HIGH); 
-    inicio=1;
-  }
   buttonState = digitalRead(buttonPin);
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
   if (buttonState == HIGH){
@@ -89,10 +85,13 @@ void loop() {
         Serial.println("Deteccion de liquido: Apagado de valvula de cerveza");
         digitalWrite(Beer,HIGH); //apaga electrovalvula de cerveza
         delay(1000);//espera estandar
+        Serial.println("Apagado piston de bajada");        
         digitalWrite(PistonesUp, HIGH);//apagar pistones de bajada
         delay(1000);//espera estandar
+        Serial.println("Encendido de piston de subida");        
         digitalWrite(PistonesDown,LOW); //Subir pistones
         delay(3000);//espera a que suban los pistones durante 3 segundos
+        Serial.println("Apagado piston de subida");        
         digitalWrite(PistonesDown,HIGH);// apagar pistones de subida
         bandera=0;
         break;
