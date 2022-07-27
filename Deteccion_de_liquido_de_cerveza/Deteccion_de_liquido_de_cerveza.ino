@@ -27,7 +27,8 @@ const int buttonPin = 2;     // Push button de inicio
 const int Beer =  12;      // Relay de electrovalvula de cerveza
 const int PistonesUp = 11;         //Relay de pistones de subida
 const int PistonesDown=10;  //pistones de bajada
-const int CO = 7;         //relay de CO2 
+const int COIN = 7;         //relay de CO2 de entrada
+const int COOUT= 8;         //relay de co2 de salida 
 int bandera=0;
 int sensorValue = 0;        // value read from the pot
 int outputValue = 0;        // value output to the PWM (analog out)
@@ -40,11 +41,15 @@ void setup() {
   pinMode(Beer,OUTPUT);
   pinMode(PistonesUp,OUTPUT);
   pinMode(PistonesDown,OUTPUT);
-  pinMode(CO,OUTPUT);  
+  pinMode(COIN,OUTPUT);  
+  pinMode(COOUT,OUTPUT);
   digitalWrite(Beer,HIGH);
-  digitalWrite(CO,HIGH);
-  digitalWrite(PistonesUp,HIGH);
+  digitalWrite(COIN,HIGH);
+  digitalWrite(COOUT,HIGH);
   digitalWrite(PistonesDown,HIGH); 
+  digitalWrite(PistonesUp,LOW);
+  delay(3000);
+  digitalWrite(PistonesUp,HIGH);
 }
 
 void loop() {
@@ -66,33 +71,40 @@ void loop() {
       Serial.println(outputValue);
       if(bandera==0){
         //Baja los pistones
-        digitalWrite(PistonesUp, LOW);
+        digitalWrite(PistonesDown, LOW);
         Serial.println("Bajando pistones...");
         delay(3000);//espera a que baje el piston 3 segundos
         //activar electrovalvula de CO2 por 12 segundos
         Serial.println("Valvula de CO2 activada");
-        digitalWrite(CO,LOW);
+        digitalWrite(COIN,LOW);
+        digitalWrite(COOUT,LOW);
         delay(12000);
         Serial.println("Valvula de CO2 desactivada");
-        digitalWrite(CO,HIGH);
+        digitalWrite(COIN,HIGH);
+        digitalWrite(COOUT,HIGH);
         delay(1000);
         //activar electrovalvula de cerveza
         Serial.println("Activacion de valvula de cerveza");
         digitalWrite(Beer, LOW);
+        delay(1000);
+        Serial.println("Activacion de valvula de co2 de salida");
+        digitalWrite(COOUT,LOW);
         bandera=1; 
       }
       if(sensorValue<800){
         Serial.println("Deteccion de liquido: Apagado de valvula de cerveza");
         digitalWrite(Beer,HIGH); //apaga electrovalvula de cerveza
+        delay(2000);
+        digitalWrite(COOUT,HIGH); //apaga electrovalvula de CO2 de salida
         delay(1000);//espera estandar
         Serial.println("Apagado piston de bajada");        
-        digitalWrite(PistonesUp, HIGH);//apagar pistones de bajada
+        digitalWrite(PistonesDown, HIGH);//apagar pistones de bajada
         delay(1000);//espera estandar
         Serial.println("Encendido de piston de subida");        
-        digitalWrite(PistonesDown,LOW); //Subir pistones
+        digitalWrite(PistonesUp,LOW); //Subir pistones
         delay(3000);//espera a que suban los pistones durante 3 segundos
         Serial.println("Apagado piston de subida");        
-        digitalWrite(PistonesDown,HIGH);// apagar pistones de subida
+        digitalWrite(PistonesUp,HIGH);// apagar pistones de subida
         bandera=0;
         break;
       }
