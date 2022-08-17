@@ -3,8 +3,13 @@ import cv2
 import cv2 as cv
 
 #Tomar foto camara usb
-cam = cv2.VideoCapture(0)
-image = cam.read()[1]
+cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+'''width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+print(width, height)'''
+image = cap.read()[1]
 
 #cambiar a version deslavada
 #BGR to l*a*b
@@ -15,8 +20,8 @@ l, a, b = cv2.split(lab)
 resized_a = cv2.resize(a, (640, 480))
 cv2.imshow('verde a magenta', resized_a)
 
-desenfoque = cv2.GaussianBlur(a, (7, 7), 0)
-ret, thresh=cv.threshold(desenfoque,122,255, cv.THRESH_BINARY)
+#desenfoque = cv2.GaussianBlur(a, (7, 7), 0)
+ret, thresh=cv.threshold(a,150,255, cv.THRESH_BINARY)
 # Resize and display the image (press key to exit)
 resized_image2 = cv2.resize(thresh, (640, 480))
 cv2.imshow("Imagen binarizada", resized_image2)
@@ -36,7 +41,7 @@ cv2.imshow("Imagen dilatada", resized_image4)
 
 # Get the contours of the shapes, sort l-to-r and create boxes
 contours, hierarchies = cv2.findContours(canny_output, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
+'''
 if len(contours) < 2:
     print("Couldn't detect two or more objects")
     exit(0)
@@ -49,7 +54,7 @@ for i, c in enumerate(contours):
     boundRect[i] = cv2.boundingRect(contours_poly[i])
 
 output_image = image.copy()
-mmPerPixel = 81.5/ boundRect[0][2]
+mmPerPixel = 40/ boundRect[0][2]
 print(boundRect[0][2])
 print(mmPerPixel)
 NumRec=0
@@ -57,9 +62,9 @@ IndiceRec=0
 for i in range(0, len(contours)):
 
     # Too smol?
-    if boundRect[i][2] < 50 or boundRect[i][3] < 50:
+    if boundRect[i][2] < 30 or boundRect[i][3] < 30:
         continue
-
+    
     # Create a boundary box
     cv2.rectangle(output_image, (int(boundRect[i][0]), int(boundRect[i][1])),
                   (int(boundRect[i][0] + boundRect[i][2]),
@@ -83,5 +88,5 @@ print("Plant height is {0:.0f}mm".format(plantHeight))
 
 # Resize and display the image (press key to exit)
 resized_image = cv2.resize(output_image, (640, 480))
-cv2.imshow("Image", resized_image)
+cv2.imshow("Image", resized_image)'''
 cv2.waitKey(0)
