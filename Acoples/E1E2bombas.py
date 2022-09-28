@@ -70,7 +70,7 @@ try: #Intentar todo el codigo principal
 			GPIO.output(RB1, 1) #apagar bomba de deposito
 			GPIO.output(RB2, 1) #apagar bomba de pecera
 			bf=0 #Reincio de bandera de hysteresis
-			dormir=abs(hora_apagado-hora_encendido-24)*60*60 #Tiempo total para dormir al control
+			dormir=abs(now.hour-hora_encendido-24)*60*60 #Tiempo total para dormir al control
 			time.sleep(dormir) #Ejecuta la funcion para dormir, con el tiempo que se establecio
 		elif GPIO.input(FFL) == 0 and GPIO.input(FFH) == 0 and GPIO.input(FPL) == 0: #Solo pasa con el DEPOSITO LLENO y con nivel bajo asegurado en pecera
 			GPIO.output(RB1, 0) #prender bomba de deposito

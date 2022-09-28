@@ -21,7 +21,7 @@ resized_a = cv2.resize(a, (640, 480))
 cv2.imshow('verde a magenta', resized_a)
 
 #desenfoque = cv2.GaussianBlur(a, (7, 7), 0)
-ret, thresh=cv.threshold(a,150,255, cv.THRESH_BINARY)
+ret, thresh=cv.threshold(a,125,255, cv.THRESH_BINARY)
 # Resize and display the image (press key to exit)
 resized_image2 = cv2.resize(thresh, (640, 480))
 cv2.imshow("Imagen binarizada", resized_image2)
