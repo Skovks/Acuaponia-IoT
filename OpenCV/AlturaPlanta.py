@@ -2,7 +2,7 @@ import imutils.contours
 import cv2 
 import cv2 as cv
 
-image = cv.imread('Fotos/image.jpg')
+image = cv.imread('Fotos/2lechugas.jpg')
 #cv.imshow('Oaxaca', image)
 
 
@@ -17,8 +17,12 @@ l, a, b = cv2.split(lab)
 resized_a = cv2.resize(a, (1280, 720))
 cv2.imshow('verde a magenta', resized_a)
 
-desenfoque = cv2.GaussianBlur(a, (7, 7), 0)
-ret, thresh=cv.threshold(desenfoque, 120, 255, cv.THRESH_BINARY)
+#desenfoque = cv2.GaussianBlur(a, (7, 7), 0)
+#resized_imageDes = cv2.resize(desenfoque, (1280, 720))
+#cv2.imshow("desenfoque", resized_imageDes)
+
+
+ret, thresh=cv.threshold(a, 120, 255, cv.THRESH_BINARY)
 # Resize and display the image (press key to exit)
 resized_image2 = cv2.resize(thresh, (1280, 720))
 cv2.imshow("Imagen binarizada", resized_image2)
@@ -56,7 +60,7 @@ IndiceRec=0
 for i in range(0, len(contours)):
 
     # Too smol?
-    if boundRect[i][2] < 500 or boundRect[i][3] < 500:
+    if boundRect[i][2] < 100 or boundRect[i][3] < 100:
         continue
 
     # Create a boundary box
