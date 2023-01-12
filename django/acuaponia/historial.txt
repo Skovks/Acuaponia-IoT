@@ -1,0 +1,248 @@
+    1  sudo add-apt-repository --yes ppa:kicad/kicad-6.0-releases
+    2  sudo apt update
+    3  sudo add-apt-repository --yes ppa:kicad/kicad-6.0-releases
+    4  sudo apt install --install-recommends kicad
+    5  exit
+    6  ls
+    7  cd Downloads/
+    8  ls
+    9  sudo dpkg -i VNC-Viewer-6.21.1109-Linux-x86.deb 
+   10  snap install libc6
+   11  sudo apt-get install -y libc6 
+   12  apt --fix-broken install
+   13  sudo apt --fix-broken install
+   14  sudo dpkg -i VNC-Viewer-6.21.1109-Linux-x86.deb 
+   15  exit
+   16  sudo add-apt-repository --yes ppa:kicad/kicad-6.0-releases
+   17  sudo apt update
+   18  sudo apt install --install-recommends kicad
+   19  exit
+   20  sudo wget https://github.com/shiftkey/desktop/releases/download/release-2.9.3-linux3/GitHubDesktop-linux-2.9.3-linux3.deb
+   21  sudo gdebi GitHubDesktop-linux-2.9.3-linux3.deb
+   22  sudo apt-get install gdebi-core 
+   23  ls
+   24  sudo dpkg -i GitHubDesktop-linux-2.9.3-linux3.deb 
+   25  sudo dpkg -i GitHubDesktop-linux-2.9.3-linux3.deb 
+   26  ps aux | grep -i apt
+   27  history
+   28  exit
+   29  sudo apt install --install-recommends kicad
+   30  sudo apt-get remove kicad 
+   31  sudo apt-get remove --auto-remove kicad 
+   32  sudo add-apt-repository --yes ppa:kicad/kicad-6.0-releases
+   33  sudo apt install --install-recommends kicad
+   34  exit
+   35  cd ..\
+   36  cd ..
+   37  ls
+   38  cd usr/
+   39  cd share/
+   40  cd kicad/
+   41  ls
+   42  exit
+   43  cd ..
+   44  cd usr/share/kicad/
+   45  ls
+   46  cd footprints/
+   47  ls
+   48  cd ..
+   49  ls
+   50  cd ..
+   51  ls
+   52  ccd schemas/
+   53  ls
+   54  cd schemas/
+   55  ls
+   56  cd ..
+   57  ls
+   58  cd ..
+   59  ls
+   60  cd local/
+   61  ls
+   62  cd lib/
+   63  ls
+   64  cd..
+   65  cd        exi
+   66  exit
+   67  sudo apt remove kicad*
+   68  cd ..
+   69  ls
+   70  cd usr/share/
+   71  ls
+   72  cd kicad/
+   73  sudo apt update
+   74  sudo apt install --install-recommends kicad
+   75  exit
+   76  sudo apt remove kicad*
+   77  sudo add-apt-repository ppa:kicad/kicad-5.1-releases
+   78  sudo apt update
+   79  sudo apt install kicad
+   80  kicad --version
+   81  sudo apt remove kicad*
+   82  exit
+   83  exit
+   84  sudo apy install nmap
+   85  sudo apt install nmap
+   86  nmap -sP 192.168.1.*
+   87  ifconfig
+   88  sudo apt install net-tools
+   89  ifconfig
+   90  nmap -sP 192.168.0.*
+   91  nmap 192.168.0.1/24
+   92  git status
+   93  sudo apt install ffmpeg
+   94  exit
+   95  sudo apt update
+   96  sudo apt-get install gparted -y
+   97  sudo apt install ffmpeg
+   98  sudo install snap
+   99  sudo apt install snap
+  100  exit
+  101  git clone git@github.com:Skovks/aquaponia.git
+  102  sudo apt install git
+  103  git clone git@github.com:Skovks/aquaponia.git
+  104  git clone https://github.com/Skovks/aquaponia.git
+  105  exit
+  106  git config --global user.name "Skovks"
+  107  git config --global user.email "al2152000114@azc.uam.mx"
+  108  git config --list
+  109  ssh-keygen -t ed25519 -C "al2152000114@azc.uam.mx"
+  110  cat /home/systemctl/.ssh/id_ed25519.pub
+  111  git clone git@github.com:Skovks/aquaponia.git
+  112  git remote -v
+  113  git clone git@github.com:Skovks/aquaponia.git
+  114  cd aquaponia/
+  115  git branch -a
+  116  git clone -b stagin git@github.com:Skovks/aquaponia.git
+  117  ls
+  118  cd aquaponia/
+  119  ls
+  120  source djenv/bin/activate
+  121  cd acuaponia/
+  122  ls
+  123  git remote -v
+  124  cd ..
+  125  ls
+  126  cd ..
+  127  ls
+  128  cd aquaponia/
+  129  git remote -v
+  130  ls
+  131  cd aquaponia/
+  132  ls
+  133  cd acuaponia/
+  134  s
+  135  ls
+  136  python manage.py runserver
+  137  python3 manage.py runserver
+  138  ls
+  139  pip freeze
+  140  sudo apt install python3-pip
+  141  pip freeze
+  142  ls
+  143  python manage.py runserver
+  144  python3 manage.py runserver
+  145  exit
+  146  pip install virtualenvwrapper
+  147  export WORKON_HOME=~/Envs
+  148  mkdir -p $WORKON_HOME
+  149  source /usr/local/bin/virtualenvwrapper.sh
+  150  mkvirtualenv acuaponia
+  151  ls
+  152  source /usr/local/bin/virtualenvwrapper.sh
+  153  ls
+  154  whois virtualenvwrapper
+  155  sudo apt install whois
+  156  whois virtualenvwrapper
+  157  pip install virtualenvwrapper
+  158  export WORKON_HOME=~/Envs
+  159  mkdir -p $WORKON_HOME
+  160  source /usr/local/bin/virtualenvwrapper.sh
+  161  source ~/.local/bin/virtualenvwrapper.sh
+  162  source /home/systemctl/.local/bin/virtualenvwrapper.sh
+  163  source /home/systemctl/local/bin/virtualenvwrapper.sh
+  164  ls
+  165  ls -a
+  166  source ./.local/bin/virtualenvwrapper.sh
+  167  which virtualenv
+  168  ~/.bashrc
+  169  sudo ~/.bashrc
+  170  cat ~/.bashrc
+  171  nano ~/.bashrc
+  172  mkdir .virtualenv
+  173  sudo apt install python3-pip
+  174  pip3 -V
+  175  pip3 install virtualenvwrapper
+  176  vim .bashrc
+  177  nano .bashrc
+  178  sudo apt install vim
+  179  vim .bashrc
+  180  pwd
+  181  nano .bashrc
+  182  ~/.bashrc command
+  183  sudo ~/.bashrc command
+  184  ~/.bashrc command
+  185  nano .bashrc
+  186  nano ~/.bashrc
+  187  mkvirtualenv acuaponia
+  188  deactivate
+  189  workon 
+  190  workon acuaponia
+  191  ls
+  192  mkdir OBNI
+  193  ls
+  194  cd OBNI/
+  195  LS
+  196  la
+  197  git clone git@github.com:brattdev/aquaponia.git
+  198  ls
+  199  cd aquaponia/
+  200  ls
+  201  git remote
+  202  git remote -v
+  203  git remote add skovks git@github.com:Skovks/aquaponia.git
+  204  git remote -v
+  205  git branch
+  206  git checkout -b stagin2
+  207  git pull skovks stagin 
+  208  git status
+  209  ls
+  210  cd requirements/
+  211  ls
+  212  pip install -r base.txt 
+  213  ls
+  214  cd ..
+  215  ls
+  216  cd acuaponia/
+  217  ls
+  218  cd ..
+  219  ls
+  220  cd acuaponia/
+  221  ls
+  222  python manage.py runserver
+  223  ls
+  224  deactivate
+  225  exit
+  226  workon
+  227  workon acuaponia
+  228  ls
+  229  cd OBNI/
+  230  ls
+  231  cd aquaponia/
+  232  ls
+  233  cd acuaponia/
+  234  ls
+  235  python manage.py runserver
+  236  exit
+  237  ls
+  238  cd OBNI/
+  239  ls
+  240  cd aquaponia/
+  241  ls
+  242  git status
+  243  git add .
+  244  git commit -m "se crearon los modelos de la app creciemientoplanta"
+  245  git status
+  246  git push skovks stagin2 
+  247  history 
+  248  history > historial.txt

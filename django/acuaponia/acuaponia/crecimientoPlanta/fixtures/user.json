@@ -1,0 +1,21 @@
+---------------Prueba de url---------------------------------
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$320000$2U82nQn8KpWEulkjK1CPtk$GWO4RWwWk3RCeRGWSvNEgkHpi8fMOEsvwgFqviIYIeA=",
+    "last_login": "2022-05-10T20:15:57.934Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "al2152000114@azc.uam.mx",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2022-04-29T00:56:38.880Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

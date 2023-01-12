@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Establecer programacion de luces</title>
+        <body>
+            <h1>Agregar horario</h1>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{form.as_table}}
+                <button type="submit" name="button">Guardar</button>
+            </form>
+
+        </body>
+    </head>
+</html>
